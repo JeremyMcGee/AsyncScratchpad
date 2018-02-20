@@ -13,7 +13,9 @@
         <h2>Slow service</h2>
         <p>Count now: <label id="count-label">0</label></p>
         <p>
-            <a onclick="callDelay()">Call the slow service:</a>
+            <a onclick="callDelay()">Call the slow service:</a><br />
+            <a onclick="callDelayWithJQueryAjax()">Call the slow service with JQuery $.ajax()</a><br />
+            <a onclick="callDelayWithJQueryAjaxAsync()">Call the slow service with JQuery to Task implementation</a>
         </p>
         <p id="service-status"><strong>Not called</strong></p>
     </div>
@@ -43,12 +45,21 @@
         serviceStatusLabel.innerHTML = this.responseText;
     }
 
-
-    function callDelay1() {
-        serviceStatusLabel.innerHTML = "Calling...";
+    function callDelayWithJQueryAjax() {
+        serviceStatusLabel.innerHTML = "Calling synchronous method...";
 
         $.ajax({
             url: '/api/Data?delay=1000'
+        }).then(function (data) {
+            serviceStatusLabel.innerHTML = data;
+        });
+    }
+
+    function callDelayWithJQueryAjaxAsync() {
+        serviceStatusLabel.innerHTML = "Calling Task based service...";
+
+        $.ajax({
+            url: '/api/DataAsync?delay=1000'
         }).then(function (data) {
             serviceStatusLabel.innerHTML = data;
         });
