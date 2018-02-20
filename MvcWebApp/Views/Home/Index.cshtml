@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Demonstration</h1>
+    <p class="lead">A simple demo of threading in ASP.NET</p>
+    <p></p>
+</div>
+
+<div class="row">
+    <div class="col-lg-3">
+        <h2>Slow service</h2>
+        <p>Count now: <label id="count-label">0</label></p>
+        <p>
+            <a onclick="callDelay()">Call the slow service:</a>
+        </p>
+        <p id="service-status"><strong>Not called</strong></p>
+    </div>
+</div>
+
+<script>
+    var count = 0;
+    var countLabel = document.getElementById('count-label');
+    setInterval(updateTimer, 100);
+
+    function updateTimer() {
+        ++count;
+        countLabel.innerHTML = count + "";
+    }
+
+    var serviceStatusLabel = document.getElementById('service-status');
+
+    function callDelay() {
+        serviceStatusLabel.innerHTML = "Calling...";
+        var oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener);
+        oReq.open("GET", "/api/Data?delay=1000");
+        oReq.send();
+    }
+
+    function reqListener() {
+        serviceStatusLabel.innerHTML = this.responseText;
+    }
+
+
+    function callDelay1() {
+        serviceStatusLabel.innerHTML = "Calling...";
+
+        $.ajax({
+            url: '/api/Data?delay=1000'
+        }).then(function (data) {
+            serviceStatusLabel.innerHTML = data;
+        });
+    }
+</script>
